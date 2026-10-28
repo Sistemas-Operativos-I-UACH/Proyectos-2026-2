@@ -4,6 +4,7 @@ Proyectos de la clase de Sistemas Operativos I de la UACH
 ## Listado de equipos
 
 * [Iván Chavero (Domador de Computadoras)](examples)
+* [Juán Pérez](a108584)
 * [NOMBRE EQUPO](directorio del equipo)
 
 ## Instrucciones
