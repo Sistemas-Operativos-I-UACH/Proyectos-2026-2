@@ -5,7 +5,8 @@ Proyectos de la clase de Sistemas Operativos I de la UACH
 
 * [Iván Chavero (Domador de Computadoras)](examples)
 * [NOMBRE EQUPO](directorio del equipo)
-
+* Carlos Ubaldo Dominguez Valles
+* a367633
 ## Instrucciones
 
 * Los ejemplos de código se encuentran en el directorio [examples](examples).
