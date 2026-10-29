@@ -5,7 +5,7 @@ Proyectos de la clase de Sistemas Operativos I de la UACH
 
 * [Iván Chavero (Domador de Computadoras)](examples)
 * [Juán Pérez](a108584)
-* [Carlos Dominguez(a367633)
+* [Carlos Dominguez](a367633)
 ## Instrucciones
 
 * Los ejemplos de código se encuentran en el directorio [examples](examples).
