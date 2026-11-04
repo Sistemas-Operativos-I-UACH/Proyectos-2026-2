@@ -7,6 +7,7 @@ struct proc_stat {
     int pid;
     char comm[256];
     char state;
+    char state_name[255];
     int ppid;
     int pgrp;
     int session;
@@ -68,6 +69,7 @@ int main (int argc, char *argv[]) {
     struct proc_stat s;
     char path[50];
     char buff[250];
+    int is_kernel = 0;
 
     if ( (proc = opendir(proc_dir)) == NULL) {
         printf("Can't open %s", proc_dir);
@@ -77,29 +79,40 @@ int main (int argc, char *argv[]) {
     while ( (entry = readdir(proc)) != NULL) {
         int pid = atoi(entry->d_name);
         if ( pid == 0) {
-            printf("%s no es numérico\n", entry->d_name);
             continue;
         }
 
-        sprintf(path, "%s/%s", proc_dir, entry->d_name);
+        sprintf(path, "%s/%s/stat", proc_dir, entry->d_name);
         printf("Abriendo archivo: %s\n", path);
         proc_pid = fopen(path, "r");
         printf("PROC_PID %d\n", proc_pid);
         if (proc_pid != NULL) {
                 //"%d (%s[^)]) %c %d %d %d",
+            //int read = fread(buf, 
             int parsed = fscanf(proc_pid,
-                "%d (%s) %c %d %d %d",
-                &s.pid, s.comm, &s.state, &s.ppid, &s.pgrp, &s.session
+                "%d (%255[^)]) %c %d %d %d %d %d %u",
+                &s.pid, s.comm, &s.state, &s.ppid, &s.pgrp, &s.session,
+                &s.tty_nr, &s.tpgid, &s.flags
             );
 
-            printf("PARSED? %d\n", parsed);
-            //if (parsed >= 52) {
-                /* 1-8: Basic Process & Parent Identifiers */
-                printf(
-                    "PID: %d\nComm: (%s)\nState: %c\nPPID: %d\nPGRP: %d\nSession: %d\n",
-                    s.pid, s.comm, s.state, s.ppid, &s.pgrp, s.session
-                );
-            //}
+
+            if (parsed != 6) {
+                printf("Error parsing: %s\n", path);
+            }
+
+            // Check the PF_KTHREAD bit
+            if ( (s.flags & 0x00200000) == 0x00200000 ) {
+                 is_kernel = 1;
+            } else {
+                 is_kernel = 0;
+            }
+            printf("\n%.30s\n", "------------------------------");
+            printf(
+                "PID: %d\nComm: (%s)\nState: %c\nPPID: %d\nPGRP: %d\nSession: %d\nProceso de kernel?: %d\n",
+                    s.pid, s.comm, s.state, s.ppid, &s.pgrp, s.session, is_kernel
+ 
+             );
+            printf("\n%.30s\n", "------------------------------");
 
             fclose(proc_pid);
         }
